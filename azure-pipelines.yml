@@ -40,6 +40,6 @@ stages:
         ConnectionType: 'AzureRM'
         azureSubscription: 'Pay-As-You-Go (0f5ce1a3-5d3c-463e-b9a8-d4743768aa5c)'
         appType: 'webAppLinux'
-        WebAppName: 'ReactBankApp'
+        WebAppName: 'ReactBankAppAPI'
         packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
         RuntimeStack: 'NODE|14-lts'
