@@ -32,6 +32,7 @@ stages:
         replaceExistingArchive: true
   - deployment: Deploy
     displayName: Deploy
+    environment: ReactBankApiEnv
     workspace:
       clean: all
     strategy:
