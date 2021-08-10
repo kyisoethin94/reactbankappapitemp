@@ -42,7 +42,8 @@ stages:
           - task: DownloadPipelineArtifact@2
             inputs:
               source: current
-              path: $(Build.ArtifactStagingDirectory)/drop 
+              artifactName: drop
+              path: $(Build.ArtifactStagingDirectory)
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
