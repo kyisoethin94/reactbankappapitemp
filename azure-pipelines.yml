@@ -13,8 +13,6 @@ stages:
   jobs:
   - job: Build
     displayName: Build
-    workspace:
-      clean: all
     steps:
     - task: NodeTool@0
       inputs:
@@ -47,3 +45,26 @@ stages:
               WebAppName: 'ReactBankAppAPI'
               packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
               RuntimeStack: 'NODE|14-lts'
+- stage: Testing
+  displayName: Testing
+  dependsOn: BuildAndDeploy
+  condition: succeeded()
+  pool:
+    vmImage: windows-latest
+  jobs:
+  - job: UITesting
+    displayName: UI Testing with Tosca
+    workspace:
+      clean: all
+    steps:
+    - task: CmdLine@2
+      displayName: 'Run Tosca CI'
+      inputs:
+        script: '$(Agent.HomeDirectory)\\Client\\ToscaCIClient.exe -m distributed -c C:\\Users\\KST\\Documents\\agent\\Client\\CITestExecutionConfiguration.xml -t junit -r $(Common.TestResultsDirectory)\\ToscaCI.xml'
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: JUnit
+        testResultsFiles: '**/ToscaCI*.xml'
+        searchFolder: '$(Common.TestResultsDirectory)'
+        failTaskOnFailedTests: true
+        testRunTitle: 'Publish ToscaCI Test Results'
