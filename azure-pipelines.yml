@@ -31,6 +31,8 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
   - deployment: Deploy
     displayName: Deploy
+    dependsOn: Build
+    condition: succeeded()   
     pool:
       vmImage: ubuntu-latest 
     environment: ReactBankApiEnv
