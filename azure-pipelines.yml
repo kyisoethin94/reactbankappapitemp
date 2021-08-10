@@ -33,8 +33,6 @@ stages:
   - deployment: Deploy
     displayName: Deploy
     environment: ReactBankApiEnv
-    workspace:
-      clean: all
     strategy:
       runOnce:    #rolling, canary are the other strategies that are supported
         deploy:
