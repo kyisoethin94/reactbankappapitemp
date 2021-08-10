@@ -6,7 +6,7 @@
 trigger:
 - master
 stages:
-- stage: Build and Deploy
+- stage: BuildAndDeploy
   displayName: Build and Deploy
   pool:
     vmImage: ubuntu-latest
