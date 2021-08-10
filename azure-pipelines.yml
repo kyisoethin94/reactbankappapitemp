@@ -28,8 +28,7 @@ stages:
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
         replaceExistingArchive: true
-    - publish: $(Build.ArtifactStagingDirectory)
-      artifact: drop
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
   - deployment: Deploy
     displayName: Deploy
     pool:
@@ -39,8 +38,7 @@ stages:
       runOnce:    #rolling, canary are the other strategies that are supported
         deploy:
           steps:
-          - download: current
-            artifact: drop
+          - download: current 
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
