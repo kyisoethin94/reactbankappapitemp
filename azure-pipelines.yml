@@ -38,7 +38,8 @@ stages:
       runOnce:    #rolling, canary are the other strategies that are supported
         deploy:
           steps:
-          - download: current 
+          - download: current
+            patterns: '**/*.zip'
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
