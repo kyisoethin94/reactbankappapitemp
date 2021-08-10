@@ -8,11 +8,11 @@ trigger:
 stages:
 - stage: BuildAndDeploy
   displayName: Build and Deploy
-  pool:
-    vmImage: ubuntu-latest
   jobs:
   - job: Build
     displayName: Build
+    pool:
+      vmImage: ubuntu-latest
     steps:
     - task: NodeTool@0
       inputs:
@@ -32,6 +32,8 @@ stages:
       artifact: drop
   - deployment: Deploy
     displayName: Deploy
+    pool:
+      vmImage: ubuntu-latest 
     environment: ReactBankApiEnv
     strategy:
       runOnce:    #rolling, canary are the other strategies that are supported
