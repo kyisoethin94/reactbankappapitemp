@@ -6,16 +6,15 @@
 trigger:
 - master
 stages:
-- stage: Build
+- stage: Build and Deploy
   displayName: Build and Deploy
+  pool:
+    vmImage: ubuntu-latest
   jobs:
-  - job: BuildAndDeploy
-    displayName: BuildAndDeploy
-    pool:
-      vmImage: ubuntu-latest
+  - job: Build
+    displayName: Build
     workspace:
       clean: all
-
     steps:
     - task: NodeTool@0
       inputs:
@@ -31,14 +30,19 @@ stages:
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
         replaceExistingArchive: true
-
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      artifact: drop
-    - task: AzureRmWebAppDeployment@4
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'Pay-As-You-Go (0f5ce1a3-5d3c-463e-b9a8-d4743768aa5c)'
-        appType: 'webAppLinux'
-        WebAppName: 'ReactBankAppAPI'
-        packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-        RuntimeStack: 'NODE|14-lts'
+  - deployment: Deploy
+    displayName: Deploy
+    workspace:
+      clean: all
+    strategy:
+      runOnce:    #rolling, canary are the other strategies that are supported
+        deploy:
+          steps:
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Pay-As-You-Go (0f5ce1a3-5d3c-463e-b9a8-d4743768aa5c)'
+              appType: 'webAppLinux'
+              WebAppName: 'ReactBankAppAPI'
+              packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              RuntimeStack: 'NODE|14-lts'
