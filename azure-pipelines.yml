@@ -39,6 +39,10 @@ stages:
       runOnce:    #rolling, canary are the other strategies that are supported
         deploy:
           steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifactName: drop
+              path: $(Build.ArtifactStagingDirectory) 
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
